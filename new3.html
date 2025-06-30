@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Sign Up - Ishaara</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to bottom right, #4A90E2, #8447FF);
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 350px;
+        }
+        h2 {
+            color: #1665D8;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .tabs a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #1665D8;
+            font-weight: bold;
+            position: relative;
+            cursor: pointer;
+        }
+        .tabs a.active::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: #1665D8;
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #1665D8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #125ABE;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+    <script>
+        function showForm(formType) {
+            document.getElementById('loginForm').classList.toggle('hidden', formType !== 'login');
+            document.getElementById('signupForm').classList.toggle('hidden', formType !== 'signup');
+            document.getElementById('loginTab').classList.toggle('active', formType === 'login');
+            document.getElementById('signupTab').classList.toggle('active', formType === 'signup');
+        }
+        
+        function authenticate(event) {
+            event.preventDefault();
+            
+            // Get form data
+            const formType = document.getElementById('loginForm').classList.contains('hidden') ? 'signup' : 'login';
+            const email = event.target.querySelector('input[type="email"]').value;
+            const password = event.target.querySelector('input[type="password"]').value;
+            
+            // Simple validation (you may want to add more robust validation)
+            if (!email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // In a real application, you would validate credentials with a backend
+            // For now, we'll simulate successful authentication
+            localStorage.setItem('isAuthenticated', 'true');
+            localStorage.setItem('userEmail', email);
+            
+            // Redirect to selection page
+            window.location.href = "new4.html";
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Ishaara</h2>
+        <div class="tabs">
+            <a id="loginTab" class="active" onclick="showForm('login')">Login</a>
+            <a id="signupTab" onclick="showForm('signup')">Sign Up</a>
+        </div>
+        
+        <form id="loginForm" onsubmit="authenticate(event)">
+            <input type="email" placeholder="Email" required>
+            <input type="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        
+        <form id="signupForm" class="hidden" onsubmit="authenticate(event)">
+            <input type="text" placeholder="Full Name" required>
+            <input type="email" placeholder="Email" required>
+            <input type="password" placeholder="Password" required>
+            <input type="password" placeholder="Confirm Password" required>
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+        import {
+             getAuth,
+             createUserWithEmailAndPassword,
+             signInWithEmailAndPassword,
+             onAuthStateChanged,
+             signOut
+
+            } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyA76x82Z6BzkaF9kmzBj_TGhh6Dfc_rNJw",
+          authDomain: "ishaara-1a022.firebaseapp.com",
+          projectId: "ishaara-1a022",
+          storageBucket: "ishaara-1a022.firebasestorage.app",
+          messagingSenderId: "659762199326",
+          appId: "1:659762199326:web:c80ef6704bf35b248e270f"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const userEmail = document.getElementById("userEmail");
+        const userPassword = document.getElementById("userPassword");
+        const userConfirmPassword = document.getElementById("userConfirmPassword");
+        const userFullName = document.getElementById("userFullName");
+        // Function to handle sign up
+        function signUp() {
+            if (userPassword.value !== userConfirmPassword.value) {
+                alert("Passwords do not match");
+                return;
+            }
+        
+            createUserWithEmailAndPassword(auth, userEmail.value, userPassword.value)
+                .then((userCredential) => {
+                    // Update profile with full name
+                    updateProfile(userCredential.user, {
+                        displayName: userFullName.value
+                    });
+                    alert("Registration successful!");
+                    window.location.href = "login.html";
+                })
+                .catch((error) => {
+                    alert("Error: " + error.message);
+                });
+        }
+        
+        // Add event listener to signup button
+        document.getElementById("signupButton").addEventListener("click", signUp);
+
+
+      
+
+      
+
+      </script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ishaara - Choose Recognition Mode</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(to bottom right, #4A90E2, #8447FF);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+        }
+        h2 {
+            color: #1665D8;
+            margin-bottom: 30px;
+        }
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .option-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid #e9ecef;
+        }
+        .option-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-color: #1665D8;
+        }
+        .option-card h3 {
+            color: #1665D8;
+            margin: 0 0 10px 0;
+        }
+        .option-card p {
+            color: #666;
+            margin: 0;
+            font-size: 0.9em;
+        }
+        .user-info {
+            margin-bottom: 20px;
+            color: #666;
+        }
+        .logout-btn {
+            background: none;
+            border: none;
+            color: #1665D8;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 5px;
+            margin-top: 20px;
+        }
+        .logout-btn:hover {
+            color: #125ABE;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="user-info">
+            Welcome, <span id="userEmail">User</span>!
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+        <h2>Choose Recognition Mode</h2>
+        <div class="options">
+            <div class="option-card" onclick="selectMode('words')">
+                <h3>Words</h3>
+                <p>Recognize common words and phrases in sign language</p>
+            </div>
+            <div class="option-card" onclick="selectMode('alphanumeric')">
+                <h3>Alphabets & Numbers</h3>
+                <p>Recognize individual letters and numbers</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check authentication
+        document.addEventListener('DOMContentLoaded', function() {
+            const isAuthenticated = localStorage.getItem('isAuthenticated');
+            if (!isAuthenticated) {
+                window.location.href = 'new3.html';
+                return;
+            }
+            
+            const userEmail = localStorage.getItem('userEmail');
+            document.getElementById('userEmail').textContent = userEmail || 'User';
+        });
+
+        function logout() {
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('userEmail');
+            window.location.href = 'new3.html';
+        }
+
+        function selectMode(mode) {
+            if (mode === 'words') {
+                window.location.href = 'words/recognition.html';
+            } else {
+                window.location.href = 'alphabets-and-numbers/recognition.html';
+            }
+        }
+    </script>
+</body>
+</html>
